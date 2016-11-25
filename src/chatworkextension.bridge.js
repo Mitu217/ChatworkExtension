@@ -31,6 +31,17 @@ var ChatworkExtension;
                             result = e.toString();
                         }
                         window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*');
+                    } else if (e.data.sender == 'ChatworkExtension.ExtensionManager' && e.data.command == 'CallAC') {
+                        var result, isError;
+                        try {
+                            isError = false;
+                            result = AC[e.data.method].apply(AC, e.data.arguments);
+                        }
+                        catch (e) {
+                            isError = true;
+                            result = e.toString();
+                        }
+                        window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*');
                     }
                 });
             };

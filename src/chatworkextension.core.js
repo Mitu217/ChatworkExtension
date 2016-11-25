@@ -119,6 +119,17 @@ var ChatworkExtension;
                 caller: caller
             }, '*');
         };
+        ExtensionManager.callAC = function (method, args, callback) {
+            var caller = new Date().valueOf() + '-' + (Math.random() * 10000) + callback.toString();
+            ExtensionManager._callBridgeQueue[caller] = callback;
+            window.postMessage({
+                sender: 'ChatworkExtension.ExtensionManager',
+                command: 'CallAC',
+                method: method,
+                arguments: args,
+                caller: caller
+            }, '*');
+        };
         ExtensionManager.executeExtensionsEvent = function (func) {
             this.extensions.forEach(function (x) {
                 try {
