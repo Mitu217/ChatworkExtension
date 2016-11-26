@@ -31,7 +31,35 @@ var ChatworkExtension;
                             result = e.toString();
                         }
                         window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*');
-                    } else if (e.data.sender == 'ChatworkExtension.ExtensionManager' && e.data.command == 'CallAC') {
+                    } else if(e.data.sender == 'ChatworkExtension.ExtensionManager' && e.data.command == 'PostCW') {
+                        var result, isError;
+
+                        try {
+                            isError = false;
+                            var params = e.data.arguments;
+                            params.push(function(d) { 
+                                result = JSON.stringify(d);
+                                window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*'); 
+                            });
+                            CW[e.data.method].apply(CW, e.data.arguments);
+                        }
+                        catch (e) {
+                            isError = true;
+                            result = e.toString();
+                            window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*'); 
+                        }
+                    }
+                });
+            };
+            return CWBridge;
+        })();
+        Bridge.CWBridge = CWBridge;
+        var ACBridge = (function () {
+            function ACBridge() {
+            }
+            ACBridge.setup = function () {
+                window.addEventListener('message', function (e) {
+                    if (e.data.sender == 'ChatworkExtension.ExtensionManager' && e.data.command == 'CallAC') {
                         var result, isError;
                         try {
                             isError = false;
@@ -41,13 +69,13 @@ var ChatworkExtension;
                             isError = true;
                             result = e.toString();
                         }
-                        window.postMessage({ sender: 'ChatworkExtension.Bridge.CWBridge', result: result, caller: e.data.caller, isError: isError }, '*');
+                        window.postMessage({ sender: 'ChatworkExtension.Bridge.ACBridge', result: result, caller: e.data.caller, isError: isError }, '*');
                     }
                 });
             };
-            return CWBridge;
+            return ACBridge;
         })();
-        Bridge.CWBridge = CWBridge;
+        Bridge.ACBridge = ACBridge;
         var ValueObserver = (function () {
             function ValueObserver(onCheck, onComplete) {
                 var _this = this;
@@ -76,3 +104,4 @@ var ChatworkExtension;
 })(ChatworkExtension || (ChatworkExtension = {}));
 ChatworkExtension.Bridge.InitializeWatcher.setup();
 ChatworkExtension.Bridge.CWBridge.setup();
+ChatworkExtension.Bridge.ACBridge.setup();

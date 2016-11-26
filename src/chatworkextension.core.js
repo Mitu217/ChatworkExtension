@@ -66,18 +66,35 @@ var ChatworkExtension;
                 _this.executeExtensionsEvent(function (x) { return x.onReady(); });
                 // CWオブジェクトはこちら側から見えないのでブリッジで呼び出すためのと
                 // Chatwork(CW)のinit_loadedを監視して、これがtrueになったらChatworkの読み込みが完了したとするため
-                _this.setupCWBridge();
+                _this.setupBridge();
             });
             //new Utility.ValueObserver(() => (<any>window).CW && CW.init_loaded, () => this.executeExtensionsEvent(x => x.onChatworkReady()));
         };
         /**
-         * CWオブジェクトを呼び出すためのブリッジのセットアップ
+         * CWオブジェクト, ACオブジェクトを呼び出すためのブリッジのセットアップ
          */
-        ExtensionManager.setupCWBridge = function () {
+        ExtensionManager.setupBridge = function () {
             var _this = this;
             // callCW メソッドの結果を受け取るやつ
             window.addEventListener('message', function (e) {
                 if (e.data.sender == 'ChatworkExtension.Bridge.CWBridge') {
+                    var result = e.data.result;
+                    var caller = e.data.caller;
+                    var isError = e.data.isError;
+                    if (ExtensionManager._callBridgeQueue[caller]) {
+                        try {
+                            ExtensionManager._callBridgeQueue[caller](result, isError);
+                        }
+                        catch (e) {
+                            window.console && console.log(e.toString());
+                        }
+                        delete ExtensionManager._callBridgeQueue[caller];
+                    }
+                }
+            });
+            // callAC メソッドの結果を受け取るやつ
+            window.addEventListener('message', function (e) {
+                if (e.data.sender == 'ChatworkExtension.Bridge.ACBridge') {
                     var result = e.data.result;
                     var caller = e.data.caller;
                     var isError = e.data.isError;
@@ -113,12 +130,29 @@ var ChatworkExtension;
             ExtensionManager._callBridgeQueue[caller] = callback;
             window.postMessage({
                 sender: 'ChatworkExtension.ExtensionManager',
-                command: 'CallCW',
+                command: method=="post"?'PostCW':'CallCW',
                 method: method,
                 arguments: args,
                 caller: caller
             }, '*');
         };
+        /**
+         * ブリッジを通してCWオブジェクトのpostメソッドを呼び出します
+         */
+        ExtensionManager.postCW = function (params, callback) {
+            var caller = new Date().valueOf() + '-' + (Math.random() * 10000) + callback.toString();
+            ExtensionManager._callBridgeQueue[caller] = callback;
+            window.postMessage({
+                sender: 'ChatworkExtension.ExtensionManager',
+                command: 'PostCW',
+                method: 'post',
+                arguments: params,
+                caller: caller
+            }, '*');
+        };
+        /**
+         * ブリッジを通してACオブジェクトのメソッドを呼び出します
+         */        
         ExtensionManager.callAC = function (method, args, callback) {
             var caller = new Date().valueOf() + '-' + (Math.random() * 10000) + callback.toString();
             ExtensionManager._callBridgeQueue[caller] = callback;
@@ -130,6 +164,7 @@ var ChatworkExtension;
                 caller: caller
             }, '*');
         };
+
         ExtensionManager.executeExtensionsEvent = function (func) {
             this.extensions.forEach(function (x) {
                 try {
