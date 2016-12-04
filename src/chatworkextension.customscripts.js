@@ -137,7 +137,7 @@ $(function () {
             content.find('.filePreviewDialogArea').css({ width: '100%', height: '100%' });
         });
         (function () {
-            var e = $C("document"), d = e.width(), e = e.height(), k, l;
+            var e = $("document"), d = e.width(), e = e.height(), k, l;
             var g = TM.dialog_header_height + TM.dialog_footer_height;
             this.$el.removeClass("previewFullDialog");
             g += TM.preview_dialog_height_padding;
@@ -303,6 +303,29 @@ $(function(){
             };
         }
     }
+
+    // 通知ON/OFFアイコンを追加する
+    let oldGetRoomItemPanel = RL.view.getRoomItemPanel;
+    RL.view.getRoomItemPanel = function(b, d){
+        var rid = parseInt(this.model.rooms[b].id);
+
+        let ignoredRoomList = []
+        let ignoredRooms = window.localStorage.getItem('w-ignored-room-list');
+        if (ignoredRooms) {
+            ignoredRoomList = JSON.parse(ignoredRooms);
+        }
+        let ignoreButton = $('<img style="cursor:pointer;position:relative;background:transparent;border:none;box-shadow:none;margin-right:.2rem;" class="_showDescription w_notifier w_'+rid+'" data-rid="'+rid+'" width="14px" height="14px" aria-label="通知機能のON/OFFが行えます">');
+        if (ignoredRoomList.indexOf(rid) != -1){
+            ignoreButton.attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gYbATkg2JA1hAAAAdxJREFUWMPtl7FLHUEQxn+nNgGrdCEgpAgJSMAqaQKCDOG1yhNtLERRsMwfkjZEBDshELCMhI8HgiCIwYAQkEAKIShYCcIDQTbNFMe93eep9+4aB47dW2bnm939ZmY3CyHQpAzRsDTuAE0eQQiBkbLKZjYGTANvgVfAqLcAJ8CVtwfAtqTTMnazEAJZlvUDngNWgKk7LrADrEv62m8Hkg6Y2QTwxVf8EDkAViX9ijkwlFj1EnBYAThu49Bt3h4FZvYR2ACGK+TbMLDhttMcMLMp4EfF4Hm5AT5I6vRwwMyeAH+A5wOOvn/AS0ndIgfaNYDjGO0YBxYSE3aBd/7tPmCcGFY+EU0klOclnTtH5oGze44Tw8rvwNM+DK6iTwwrT8K/wIuI8g6w6P1NoHXP8bycS3pWrAUdIJYsWoltvOt4Xn7GjuBTjYXwW48Dkn4D2zWAnwBbqVS8BlwMEPzao+Q66oCHzwzQHRD4YrEqRsuxmbWA7xWCXwGzknZKlWOfUCXhXhfBY5kwL9OJSla2SnYd+LOk/X6KKQfaheq17HniPTAJjAFvCnNOgWNgH9iTVGoXezjgV7Ej/90C1iRd1nkrnvNQXJU08LwwkgiXcUkX1CFNP0yyx8dp0w78B5WJzMv8p27yAAAAAElFTkSuQmCC');
+        } else {
+            ignoreButton.attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gYbATo7edivqwAAAepJREFUWMPtl7FLJDEUxn/jbiNYXSeCYOF4cAhbKQFBsJBtlRVtrpAThS2t8idMZSt3CHaCIFgqFguCMCCKBwcH5uAK4bgFK2FhQZDYvGKYTdZRZ2caHwzJhJf3vSTfey8JrLWUKUOULKU7QJlHYK2lmlU5jOJxYAmYAaaAEWkBboGOtJfAsdHqLovdwFpLEAT9gFeBTWDhlQtsAT+MVof9dsDrQBjFNeC7rPg9cglsGa1+uhwY8qz6G3CVAzhi40psvhwFYRRvA3tAJUe+VYA9se3nQBjFC8BZzuBJeQIWjVatHg6EUTwM/AHGBhx9/4BJo1U3zYFGAeAIRsPFga+eCefArHzn7xjHhZVMRDWP8prRqi0cWQP+v3EcF1ZyBz71YXAefVxYSRL+BSYcyqfAuvT3gfobx5PSNlqNpmtBC3Ali7pnG187npRr1xHsFFgIj3ocMFr9Bo4LAL8FDnypuAncDxD8UaLk0emAhM8y0B0Q+Hq6KjrLcRjFdeAkR/AOsGK0Os1UjmVCnoT7nAZ3ZcKkLHkqWdYq2RXgXaNV3E/R50AjVb02JE/MAfPAODCdmnMH/AJi4MJolWkXezggV7Eb+T0AmkarhyJvxasSiltGq4HnhaonXL4Yre4pQsp+mAQfj9OyHXgGDUPJfoJO3VAAAAAASUVORK5CYII=');
+        }
+
+        let $el = $(oldGetRoomItemPanel.apply(this, arguments));
+        $el.find('.chatListTitleArea').prepend(ignoreButton);
+        return $el.wrap('<p>').parent().html();
+    };
+
     var oldViewBuild = RL.view.build;
     RL.view.build = function(b, id, show){
         if(!wameiz_display_mode){
@@ -316,7 +339,7 @@ $(function(){
             e = b.length,
             f = e;
         if (e) {
-            $C("#_chatListEmptyArea").hide();
+            $("#_chatListEmptyArea").hide();
             if (e > a.room_show_limit) f = a.room_show_limit;
             for (var g = 0; g < f; g++){
                 if(b[g] != void 0){
@@ -329,7 +352,7 @@ $(function(){
                         if(id[g] == 'all'){
                             name = 'その他のチャット一覧';
                         }else{
-                            name = $C("#_chatCategoryList").find("[data-cat-id=" + id[g] + "]").find("span._categoryName").text();
+                            name = $("#_chatCategoryList").find("[data-cat-id=" + id[g] + "]").find("span._categoryName").text();
                         }
                         var unread = '';
                         if(a.model.my_filter_category[id[g]] && a.model.my_filter_category_unread[id[g]] > 0 && !show){
@@ -337,12 +360,12 @@ $(function(){
                         }
                         d += '<div id="_categoryDisplay_' + id[g] + '" class="chatCategoryTitle" style="cursor: pointer; background-color: rgb(215, 215, 215);"><span id="_categoryDisplayTitle_' + id[g] + '" class="categoryDisplayTitle">' + name + '</span>'+unread+'</div><ul role="list" class="menuListTitle cwTextUnselectable" id="_categoryDisplayList_'+id[g]+'" style="display:block;">';
                     }
-                    d += a.getRoomItemPanel(b[g]);
+                    d += a.getRoomItemPanel(b[g], g);
                 }
             }
             e > f && (d += '<div class="roomLimitOver"><div>' + L.chat_rest_roomtip + (e - a.room_show_limit) +
                 '</div><div id="_roomMore" class="button">' + L.chat_show_more + "</div></div>");
-            $C("#_roomListItems").html(d);
+            $("#_roomListItems").html(d);
             if(id){
                 var ui_category_list = $.cookie('ui_category_list');
                 if(ui_category_list !== undefined){
@@ -368,7 +391,7 @@ $(function(){
             }
             b = RL.getFocusedRoomId();
             b > 0 && a.model.focusRoom(b);
-        } else $C("#_roomListItems").quickEmpty(), $C("#_chatListEmptyArea ._chatListEmpty").hide(), a.model.filter_readonly ? $C("#_chatListUnreadEmpty").show() : a.model.filter_toonly ? $C("#_chatListToEmpty").show() : a.model.filter_taskonly && $C("#_chatListTaskEmpty").show(), $C("#_chatListEmptyArea").show();
+        } else $("#_roomListItems").quickEmpty(), $("#_chatListEmptyArea ._chatListEmpty").hide(), a.model.filter_readonly ? $("#_chatListUnreadEmpty").show() : a.model.filter_toonly ? $("#_chatListToEmpty").show() : a.model.filter_taskonly && $("#_chatListTaskEmpty").show(), $("#_chatListEmptyArea").show();
     };
     RL.myGetSortedRoomList = function(checked){
         var b = this;
@@ -384,4 +407,63 @@ $(function(){
         return e
     };
     RL.build();
+});
+
+// チャットグループごとのON/OFFボタンの有効化
+$(function () {
+  $('#_roomListArea').on('click', 'img.w_notifier', function() {
+    let rid = parseInt($(this).attr('data-rid'));
+
+    let ignoredRoomList = []
+    let ignoredRooms = window.localStorage.getItem('w-ignored-room-list');
+    if (ignoredRooms) {
+        ignoredRoomList = JSON.parse(ignoredRooms);
+    }
+    let index = ignoredRoomList.indexOf(rid);
+
+    if(index != -1){
+        ignoredRoomList.splice(index, 1);
+        $(".w_notifier.w_"+rid).attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gYbATo7edivqwAAAepJREFUWMPtl7FLJDEUxn/jbiNYXSeCYOF4cAhbKQFBsJBtlRVtrpAThS2t8idMZSt3CHaCIFgqFguCMCCKBwcH5uAK4bgFK2FhQZDYvGKYTdZRZ2caHwzJhJf3vSTfey8JrLWUKUOULKU7QJlHYK2lmlU5jOJxYAmYAaaAEWkBboGOtJfAsdHqLovdwFpLEAT9gFeBTWDhlQtsAT+MVof9dsDrQBjFNeC7rPg9cglsGa1+uhwY8qz6G3CVAzhi40psvhwFYRRvA3tAJUe+VYA9se3nQBjFC8BZzuBJeQIWjVatHg6EUTwM/AHGBhx9/4BJo1U3zYFGAeAIRsPFga+eCefArHzn7xjHhZVMRDWP8prRqi0cWQP+v3EcF1ZyBz71YXAefVxYSRL+BSYcyqfAuvT3gfobx5PSNlqNpmtBC3Ali7pnG187npRr1xHsFFgIj3ocMFr9Bo4LAL8FDnypuAncDxD8UaLk0emAhM8y0B0Q+Hq6KjrLcRjFdeAkR/AOsGK0Os1UjmVCnoT7nAZ3ZcKkLHkqWdYq2RXgXaNV3E/R50AjVb02JE/MAfPAODCdmnMH/AJi4MJolWkXezggV7Eb+T0AmkarhyJvxasSiltGq4HnhaonXL4Yre4pQsp+mAQfj9OyHXgGDUPJfoJO3VAAAAAASUVORK5CYII=');
+    }else{
+        ignoredRoomList.push(rid);
+        $(".w_notifier.w_"+rid).attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gYbATkg2JA1hAAAAdxJREFUWMPtl7FLHUEQxn+nNgGrdCEgpAgJSMAqaQKCDOG1yhNtLERRsMwfkjZEBDshELCMhI8HgiCIwYAQkEAKIShYCcIDQTbNFMe93eep9+4aB47dW2bnm939ZmY3CyHQpAzRsDTuAE0eQQiBkbLKZjYGTANvgVfAqLcAJ8CVtwfAtqTTMnazEAJZlvUDngNWgKk7LrADrEv62m8Hkg6Y2QTwxVf8EDkAViX9ijkwlFj1EnBYAThu49Bt3h4FZvYR2ACGK+TbMLDhttMcMLMp4EfF4Hm5AT5I6vRwwMyeAH+A5wOOvn/AS0ndIgfaNYDjGO0YBxYSE3aBd/7tPmCcGFY+EU0klOclnTtH5oGze44Tw8rvwNM+DK6iTwwrT8K/wIuI8g6w6P1NoHXP8bycS3pWrAUdIJYsWoltvOt4Xn7GjuBTjYXwW48Dkn4D2zWAnwBbqVS8BlwMEPzao+Q66oCHzwzQHRD4YrEqRsuxmbWA7xWCXwGzknZKlWOfUCXhXhfBY5kwL9OJSla2SnYd+LOk/X6KKQfaheq17HniPTAJjAFvCnNOgWNgH9iTVGoXezjgV7Ej/90C1iRd1nkrnvNQXJU08LwwkgiXcUkX1CFNP0yyx8dp0w78B5WJzMv8p27yAAAAAElFTkSuQmCC');
+    }
+
+    window.localStorage.setItem('w-ignored-room-list', JSON.stringify(ignoredRoomList));
+
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
+  });
+});
+// チャットグループごとに通知をするかの判定
+$(function () {
+    let oldPopup = CW.popup;
+    CW.popup = function(b, f, d, e){
+        let msg = d;
+        console.log(msg);
+        let ignoredRoomList = []
+        let ignoredRooms = window.localStorage.getItem('w-ignored-room-list');
+        if (ignoredRooms) {
+            ignoredRoomList = JSON.parse(ignoredRooms);
+        }
+
+        if (msg.indexOf("[info][title][dtext:chatroom_chat_edited]") != -1 ||
+            msg.indexOf("[info][dtext:chatroom_member_is]") != -1 ||
+            msg.indexOf("[info][dtext:chatroom_chat_joined]") != -1 ||
+            msg.indexOf("チャット情報を変更しました") != -1 ||
+            msg.indexOf("が退席しました") != -1 ||
+            msg.indexOf("チャットに参加しました") != -1 ||
+            ignoredRoomList.indexOf(parseInt(e)) != -1) {
+            if(wfocus){
+                return;
+            }
+            wfocus = !0;
+            setTimeout(function(){
+                wfocus = !1;
+            }, 200);
+            return;
+        }
+        oldPopup.apply(this, arguments);
+    };
 });
