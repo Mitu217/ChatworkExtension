@@ -19,6 +19,14 @@
   height: 360px !important;
 }
 /* -------------------------------------------------- */
+/* グループチャットのタイトルが改行しないように            */
+/* -------------------------------------------------- */
+.chatListTitleArea {
+  white-space: nowrap !important;
+	text-overflow: ellipsis !important;
+	overflow: hidden !important;
+}
+/* -------------------------------------------------- */
 /* 高さを変えるやつ                                    */
 /* -------------------------------------------------- */
 .__x-ResizeGroupListHeight-enabled .chatListPin {
