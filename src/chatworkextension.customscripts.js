@@ -430,9 +430,6 @@ $(function () {
     }
 
     window.localStorage.setItem('w-ignored-room-list', JSON.stringify(ignoredRoomList));
-
-    event.stopPropagation();
-    event.preventDefault();
     return false;
   });
 });
@@ -441,13 +438,11 @@ $(function () {
     let oldPopup = CW.popup;
     CW.popup = function(b, f, d, e){
         let msg = d;
-        console.log(msg);
         let ignoredRoomList = []
         let ignoredRooms = window.localStorage.getItem('w-ignored-room-list');
         if (ignoredRooms) {
             ignoredRoomList = JSON.parse(ignoredRooms);
         }
-
         if (msg.indexOf("[info][title][dtext:chatroom_chat_edited]") != -1 ||
             msg.indexOf("[info][dtext:chatroom_member_is]") != -1 ||
             msg.indexOf("[info][dtext:chatroom_chat_joined]") != -1 ||
@@ -455,15 +450,12 @@ $(function () {
             msg.indexOf("が退席しました") != -1 ||
             msg.indexOf("チャットに参加しました") != -1 ||
             ignoredRoomList.indexOf(parseInt(e)) != -1) {
-            if(wfocus){
-                return;
-            }
-            wfocus = !0;
-            setTimeout(function(){
-                wfocus = !1;
-            }, 200);
-            return;
+              return;
         }
-        oldPopup.apply(this, arguments);
+        oldPopup.apply(_this, arguments);
     };
+});
+// グループリストの幅が縮み過ぎてしまうのを帽子
+$(function () {
+  TM.chatlist_min_width = 225;
 });

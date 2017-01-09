@@ -19,6 +19,14 @@
   height: 360px !important;
 }
 /* -------------------------------------------------- */
+/* グループチャット上部のアイコンが重複しないように         */
+/* -------------------------------------------------- */
+.chatListTitleArea {
+  white-space: nowrap !important;
+	text-overflow: ellipsis !important;
+	overflow: hidden !important;
+}
+/* -------------------------------------------------- */
 /* グループチャットのタイトルが改行しないように            */
 /* -------------------------------------------------- */
 .chatListTitleArea {
@@ -160,7 +168,7 @@
 }
 .__x-FlatStyle-enabled .chatFilterMenu .btnNavList li {
   min-width: 32px;
-  max-width: 48px;
+  max-width: 32px;
 }
 .__x-FlatStyle-enabled textarea,
 .__x-FlatStyle-enabled select,
