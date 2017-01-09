@@ -1,10 +1,10 @@
 ﻿{
     "manifest_version": 2,
-    "name": "ChatWork Extension",
-    "version": "0.37564.14",
-    "description": "ChatWorkの痛みを緩和します。",
-    "homepage_url": "https://github.com/mayuki/ChatworkExtension",
-    "author": "Mayuki Sawatari",
+    "name": "ChatWork Extension Neo",
+    "version": "0.12",
+    "description": "ChatWork Extensionの機能追加版です",
+    "homepage_url": "https://github.com/Mitu217/ChatworkExtension",
+    "author": "Mamoru Uehara",
     "content_scripts": [
         {
             "matches": [ "https://kcw.kddi.ne.jp/*", "https://www.chatwork.com/*" ],
