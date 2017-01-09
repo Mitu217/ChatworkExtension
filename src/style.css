@@ -19,20 +19,17 @@
   height: 360px !important;
 }
 /* -------------------------------------------------- */
-/* グループチャット上部のアイコンが重複しないように         */
-/* -------------------------------------------------- */
-.chatListTitleArea {
-  white-space: nowrap !important;
-	text-overflow: ellipsis !important;
-	overflow: hidden !important;
-}
-/* -------------------------------------------------- */
 /* グループチャットのタイトルが改行しないように            */
 /* -------------------------------------------------- */
 .chatListTitleArea {
   white-space: nowrap !important;
 	text-overflow: ellipsis !important;
-	overflow: hidden !important;
+}
+/* -------------------------------------------------- */
+/* グループチャット名のフォントサイズを変更               */
+/* -------------------------------------------------- */
+.__x-ResizeGroupListFontSize {
+
 }
 /* -------------------------------------------------- */
 /* 高さを変えるやつ                                    */
@@ -42,28 +39,41 @@
 }
 .__x-ResizeGroupListHeight-enabled .chatListPin ._pin {
   -webkit-transform: scale(0.6);
+  display: flex;
 }
 .__x-ResizeGroupListHeight-enabled .chatListTitleArea {
+  height: 20px;
   float: left;
+  flex-grow: 1;
 }
 .__x-ResizeGroupListHeight-enabled .chatListTitleArea + .incomplete {
-  position: absolute;
-  right: 0;
   -webkit-transform: scale(0.6);
-  margin-left: 10px;
-  width: 100px;
+  width: 32px;
   text-align: left;
+  text-align: right;
 }
 .__x-ResizeGroupListHeight-enabled #_roomListItems li {
+  display: flex;
+  height: auto;
+  min-height: 20px;
+}
+.__x-ResizeGroupListHeight-enabled #_roomListItems .roomIcon {
   height: 20px;
-  min-height: 0;
+  width: auto;
 }
 .__x-ResizeGroupListHeight-enabled #_roomListItems .roomIcon img {
+  vertical-align: top;
+  margin-top: 2px;
   width: 16px;
   height: 16px;
 }
 .__x-ResizeGroupListHeight-enabled .chatListMeta {
-  left: 31px;
+  display: flex;
+  top: 2px;
+  position: relative;
+  margin-left: -50px;
+  overflow: hidden !important;
+  width: 83%;
   font-size: 0.9em;
 }
 .__x-ResizeGroupListHeight-enabled .chatListMeta::after {
@@ -179,3 +189,8 @@
   border-radius: 0;
 }
 /*# sourceMappingURL=style.css.map */
+
+
+img.w_notifier {
+  margin-right: 8px !important;
+}
