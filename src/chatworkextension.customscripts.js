@@ -25,7 +25,7 @@ $(function () {
                 search: function (term, callback) {
                     var memberIds = RM.getSortedMemberList().filter(function (x) { return x !== AC.myid.toString(); });
                     var re = new RegExp(MigemoJS.getRegExp(term), "i");
-                    callback(memberIds.map(function (memberId) {
+                    callback($.map(memberIds, function (memberId) {
                         var searchKeys = AC.getSearchKeys(memberId).concat([AC.getTwitter(memberId)]).join(' ');
                         return re.test(searchKeys) ? memberId : null;
                     }).filter(function (x) { return x !== null; }));
@@ -40,7 +40,7 @@ $(function () {
                     return '[To:' + memberId + '] ' + displayName + "\n";
                 }
             }
-        ], { adapter: CustomTextareaAdapter, appendTo: '.chatSendAreaContent' });
+        ], { adapter: CustomTextareaAdapter, appendTo: '.chatInput' });
     }, 1000);
 });
 // 常にグループ一覧を名前でソートするモード
@@ -372,6 +372,7 @@ $(function(){
                     a.model.my_filter_category = JSON.parse(ui_category_list);
                 }
                 if(!show){
+
                 var categoryList = a.model.getSortedCategoryList();
                 categoryList.push('all');
                 for(var i = 0; i < categoryList.length; i++){
@@ -407,6 +408,23 @@ $(function(){
         return e
     };
     RL.build();
+
+    function getCookie(c_name){
+    var st="";
+    var ed="";
+    if(document.cookie.length>0){
+        // クッキーの値を取り出す
+        st=document.cookie.indexOf(c_name + "=");
+        if(st!=-1){
+            st=st+c_name.length+1;
+            ed=document.cookie.indexOf(";",st);
+            if(ed==-1) ed=document.cookie.length;
+            // 値をデコードして返す
+            return unescape(document.cookie.substring(st,ed));
+        }
+    }
+    return "";
+  }
 });
 
 // チャットグループごとのON/OFFボタンの有効化

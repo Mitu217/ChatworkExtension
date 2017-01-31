@@ -95,17 +95,23 @@ var ChatworkExtension;
                     window.document.body.appendChild(script);
                 });
                 // MigemoJS
-                var scriptE = document.createElement('script');
-                scriptE.type = 'text/javascript';
-                scriptE.src = chrome.extension.getURL('migemojs/migemo.js');
-                scriptE.id = 'script-migemojs';
-                window.document.body.appendChild(scriptE);
+                var scriptE1 = document.createElement('script');
+                scriptE1.type = 'text/javascript';
+                scriptE1.src = chrome.extension.getURL('migemojs/migemo.js');
+                scriptE1.id = 'script-migemojs';
+                window.document.body.appendChild(scriptE1);
                 // jquery-textcomplete
                 var scriptE2 = document.createElement('script');
                 scriptE2.type = 'text/javascript';
                 scriptE2.src = chrome.extension.getURL('jquery-textcomplete/jquery.textcomplete.min.js');
                 scriptE2.id = 'script-jquery-textcomplete';
                 window.document.body.appendChild(scriptE2);
+                // jquery-cookie
+                var scriptE3 = document.createElement('script');
+                scriptE3.type = 'text/javascript';
+                scriptE3.src = chrome.extension.getURL('jquery-cookie/jquery.cookie.min.js');
+                scriptE3.id = 'script-jquery-cookie';
+                window.document.body.appendChild(scriptE3);
             };
             InjectWebPageContextCustomScripts.metadata = {
                 hidden: true

@@ -1,7 +1,7 @@
 ﻿{
     "manifest_version": 2,
     "name": "ChatWork Extension Neo",
-    "version": "0.12",
+    "version": "0.122",
     "description": "ChatWork Extensionの機能追加版です",
     "homepage_url": "https://github.com/Mitu217/ChatworkExtension",
     "author": "Mamoru Uehara",
@@ -26,6 +26,8 @@
         "chatworkextension.customscripts.js",
         "dicts/*.txt",
         "migemojs/migemo.js",
+        "jquery/jquery.min.js",
+        "jquery-cookie/jquery.cookie.min.js",
         "jquery-textcomplete/jquery.textcomplete.min.js",
         "highlightjs/styles/*.css"
     ],
