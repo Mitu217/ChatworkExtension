@@ -187,7 +187,7 @@ $(function(){
         }
         if (b.has_update) return b.load();
         else {
-            var a = b.getSortedRoomList();
+            var a = b.sortByLastUpdateTime(b.getSortedRoomList());
             b.filtered_room_list = [];
             b.filtered_room_list_id = [];
             b.my_filter_category_unread = new Object();
@@ -230,7 +230,7 @@ $(function(){
                 for (var e = !0, d = 0, i = b.category_dat[fc].list.length; d < i; d++) k[b.category_dat[fc].list[d]] = !0;
             i = [];
             b.filter_word && (i = CW.splitWithSpace(b.filter_word));
-            for (var h = 0; h < a.length; h++)
+            for (var h = 0; h < a.length; h++) {
                 if (a[h] != void 0) {
                     var d = b.rooms[a[h]],
                         j = d.getUnreadNum(),
@@ -262,6 +262,7 @@ $(function(){
                     b.filtered_room_list.push(a[h]);
                     b.filtered_room_list_id.push(fc);
                 }
+            }
         }
     };
     RL.view.mySelectCategoryToggle = function(id){
@@ -384,7 +385,6 @@ $(function(){
                     a.model.my_filter_category = JSON.parse(ui_category_list);
                 }
                 if(!show){
-
                 var categoryList = a.model.getSortedCategoryList();
                 categoryList.push('all');
                 for(var i = 0; i < categoryList.length; i++){
