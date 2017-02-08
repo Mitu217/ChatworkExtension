@@ -463,6 +463,7 @@ $(function () {
     return false;
   });
 });
+
 // チャットグループごとに通知をするかの判定
 $(function () {
     let oldPopup = CW.popup;
@@ -485,7 +486,39 @@ $(function () {
         oldPopup.apply(_this, arguments);
     };
 });
+
 // グループリストの幅が縮み過ぎてしまうのを帽子
 $(function () {
   TM.chatlist_min_width = 225;
+});
+
+// グループ全員To(省略型)
+$(function() {
+    console.log($('#_toListSelectAll'));
+    var btn = $($('#_toList').find('._cwLTSelectOptionArea')).append('　<span id="_toListSelectMinimumAll" class="linkStatus">すべて選択(省略)</span>');
+    btn.click(function() {
+        // ToListの生成
+        var to_list = [];
+        $($('#_toList').find('._cwLTList')).find('img').each(function(){
+            var aid = $(this).attr('data-aid');
+            to_list.push("[To:" + aid + "]");
+        });
+
+        // テキストエリアへ挿入
+        var str = to_list.join(" ") + '\n';
+        var textArea = $('#_chatText')
+        textArea.focus();
+        if(navigator.userAgent.match(/MSIE/)) {
+            var r = document.selection.createRange();
+            r.text = str;
+            r.select();
+        } else {
+            var s = textArea.val();
+            var p = textArea.get(0).selectionStart;
+            var np = p + str.length;
+            textArea.val(s.substr(0, p) + str + s.substr(p));
+            textArea.get(0).setSelectionRange(np, np);
+        }
+        $('#_toList').cwListTip().close()
+    });
 });
