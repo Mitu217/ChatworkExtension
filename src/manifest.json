@@ -1,7 +1,7 @@
 ﻿{
     "manifest_version": 2,
     "name": "ChatWork Extension Neo",
-    "version": "0.124",
+    "version": "0.13",
     "description": "ChatWork Extensionの機能追加版です",
     "homepage_url": "https://github.com/Mitu217/ChatworkExtension",
     "author": "Mamoru Uehara",
