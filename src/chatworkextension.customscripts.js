@@ -19,28 +19,40 @@ $(function () {
                 $.fn.textcomplete['Textarea'].prototype._skipSearch.apply(_this, [clickEvent]);
             }
         });
-        $('#_chatText').textcomplete([
-            {
-                match: /\B@(\w*)$/,
-                search: function (term, callback) {
-                    var memberIds = RM.getSortedMemberList().filter(function (x) { return x !== AC.myid.toString(); });
-                    var re = new RegExp(MigemoJS.getRegExp(term), "i");
-                    callback($.map(memberIds, function (memberId) {
-                        var searchKeys = AC.getSearchKeys(memberId).concat([AC.getTwitter(memberId)]).join(' ');
-                        return re.test(searchKeys) ? memberId : null;
-                    }).filter(function (x) { return x !== null; }));
-                },
-                template: function (memberId) {
-                    var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
-                    return CW.getAvatarPanel(memberId, { clicktip: true, size: "small" }) + ' <span class="autotrim">' + escape_html(displayName) + "</span>";
-                },
-                index: 1,
-                replace: function (memberId) {
-                    var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
-                    return '[To:' + memberId + '] ' + displayName + "\n";
+        // Chatworkの仕様変更に耐えうる設計に
+        var textCompleteTarget = '';
+        if($('.chatSendAreaContent').length){
+            textCompleteTarget = '.chatSendAreaContent';
+        } else if ($('.chatInput').length) {
+            textCompleteTarget = '.chatInput';
+        }
+        if(textCompleteTarget !== '') {
+            $('#_chatText').textcomplete([
+                {
+                    match: /\B@(\w*)$/,
+                    search: function (term, callback) {
+                        var memberIds = RM.getSortedMemberList().filter(function (x) { return x !== AC.myid.toString(); });
+                        var re = new RegExp(MigemoJS.getRegExp(term), "i");
+                        callback($.map(memberIds, function (memberId) {
+                            var searchKeys = AC.getSearchKeys(memberId).concat([AC.getTwitter(memberId)]).join(' ');
+                            return re.test(searchKeys) ? memberId : null;
+                        }).filter(function (x) { return x !== null; }));
+                    },
+                    template: function (memberId) {
+                        var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
+                        return CW.getAvatarPanel(memberId, { clicktip: true, size: "small" }) + ' <span class="autotrim">' + escape_html(displayName) + "</span>";
+                    },
+                    index: 1,
+                    replace: function (memberId) {
+                        var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
+                        return '[To:' + memberId + '] ' + displayName + "\n";
+                    }
                 }
-            }
-        ], { adapter: CustomTextareaAdapter, appendTo: '.chatSendAreaContent' });
+            ], { adapter: CustomTextareaAdapter, appendTo: textCompleteTarget });            
+        } else {
+            console.error('not fount complete class');
+        }
+        
     }, 1000);
 });
 // 常にグループ一覧を名前でソートするモード
