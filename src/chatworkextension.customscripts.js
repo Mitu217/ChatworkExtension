@@ -40,7 +40,7 @@ $(function () {
                     return '[To:' + memberId + '] ' + displayName + "\n";
                 }
             }
-        ], { adapter: CustomTextareaAdapter, appendTo: '.chatInput' });
+        ], { adapter: CustomTextareaAdapter, appendTo: '.chatSendAreaContent' });
     }, 1000);
 });
 // 常にグループ一覧を名前でソートするモード
