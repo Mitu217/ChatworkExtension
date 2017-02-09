@@ -215,7 +215,7 @@ var ChatworkExtension;
         ExtensionManager.observeToList = function () {
             var _this = this;
             this.observeAddElement(document.getElementById('_toList'), function (addedNode) {
-                if (addedNode.getAttribute('role') == 'listitem') {
+                if (addedNode.hasAttribute && addedNode.getAttribute('role') == 'listitem') {
                     _this.executeExtensionsEvent(function (x) { return x.onToListItemAdded(addedNode); });
                 }
             });

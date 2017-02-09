@@ -188,11 +188,22 @@ $(function(){
         if (b.has_update) return b.load();
         else {
             var a = b.sortByLastUpdateTime(b.getSortedRoomList());
+            var sorted_stick_room_id = [];
+            if(b.getStickyRoomNum() > 0) {
+                var stick_room_list = b.getSortedRoomList().slice(0, b.getStickyRoomNum());
+                for (var i=a.length-1; i>=0; i--){
+                    if(stick_room_list.indexOf(a[i]) > -1) {
+                        sorted_stick_room_id.unshift(a[i]);
+                        a.splice(i, 1);
+                    }
+                }
+            }
+            a = sorted_stick_room_id.concat(a);
             b.filtered_room_list = [];
             b.filtered_room_list_id = [];
             b.my_filter_category_unread = new Object();
             var sortedCategory = b.getSortedCategoryList();
-            for(var i = 0; i <  sortedCategory.length; i++){
+            for(var i=0; i<sortedCategory.length; i++){
                 addRoom(sortedCategory[i]);
             }
             addRoom('all', true);
@@ -494,8 +505,7 @@ $(function () {
 
 // グループ全員To(省略型)
 $(function() {
-    console.log($('#_toListSelectAll'));
-    var btn = $($('#_toList').find('._cwLTSelectOptionArea')).append('　<span id="_toListSelectMinimumAll" class="linkStatus">すべて選択(省略)</span>');
+    var btn = $($('#_toList').find('._cwLTSelectOptionArea')).append('　<span id="_toListSelectMinimumAll" role="to_all" class="linkStatus">すべて選択(省略)</span>');
     btn.click(function() {
         // ToListの生成
         var to_list = [];
