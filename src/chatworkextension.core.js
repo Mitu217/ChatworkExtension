@@ -68,7 +68,7 @@ var ChatworkExtension;
                 // Chatwork(CW)のinit_loadedを監視して、これがtrueになったらChatworkの読み込みが完了したとするため
                 _this.setupBridge();
             });
-            //new Utility.ValueObserver(() => (<any>window).CW && CW.init_loaded, () => this.executeExtensionsEvent(x => x.onChatworkReady()));
+            //new Utility.ValueObserver(() => window.CW && CW.init_loaded, () => this.executeExtensionsEvent(x => x.onChatworkReady()));
         };
         /**
          * CWオブジェクト, ACオブジェクトを呼び出すためのブリッジのセットアップ

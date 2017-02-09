@@ -8,9 +8,6 @@
 #_sideContentTitle {
   height: 0 !important;
 }
-#_chatFilterMenu {
-  height: 74px !important;
-}
 /* -------------------------------------------------- */
 /* TOリストの高さを伸ばす                              */
 /* -------------------------------------------------- */
@@ -21,16 +18,24 @@
 /* -------------------------------------------------- */
 /* 高さを変えるやつ                                    */
 /* -------------------------------------------------- */
-.__x-ResizeGroupListHeight-enabled .chatListPin {
+.__x-ResizeGroupListHeight-enabled .chatListPin,
+.__x-ResizeGroupListHeight-enabled .roomListItem__pinContainer {
   top: 0;
 }
-.__x-ResizeGroupListHeight-enabled .chatListPin ._pin {
+.__x-ResizeGroupListHeight-enabled .chatListPin ._pin,
+.__x-ResizeGroupListHeight-enabled .roomListItem__pinContainer ._pin  {
   -webkit-transform: scale(0.6);
 }
-.__x-ResizeGroupListHeight-enabled .chatListTitleArea {
+.__x-ResizeGroupListHeight-enabled .chatListTitleArea,
+.__x-ResizeGroupListHeight-enabled .roomListItem__roomName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   float: left;
+  width: 100%;
 }
-.__x-ResizeGroupListHeight-enabled .chatListTitleArea + .incomplete {
+.__x-ResizeGroupListHeight-enabled .chatListTitleArea + .incomplete,
+.__x-ResizeGroupListHeight-enabled .roomListItem__roomName + .roomListBadges {
   position: absolute;
   right: 0;
   -webkit-transform: scale(0.6);
@@ -42,11 +47,13 @@
   height: 20px;
   min-height: 0;
 }
-.__x-ResizeGroupListHeight-enabled #_roomListItems .roomIcon img {
+.__x-ResizeGroupListHeight-enabled #_roomListItems .roomIcon img,
+.__x-ResizeGroupListHeight-enabled #_roomListItems .roomListItem__iconContainer {
   width: 16px;
   height: 16px;
 }
-.__x-ResizeGroupListHeight-enabled .chatListMeta {
+.__x-ResizeGroupListHeight-enabled .chatListMeta,
+.__x-ResizeGroupListHeight-enabled .roomListItem__roomInfo {
   left: 31px;
   font-size: 0.9em;
 }
@@ -161,5 +168,15 @@
 .__x-FlatStyle-enabled input[type="date"] {
   box-shadow: none;
   border-radius: 0;
+}
+.__x-FlatStyle-enabled .sideContentMenu__header {
+  display: none;
+}
+.__x-FlatStyle-enabled .sideContentMenu__addButton {
+  position: absolute;
+  top: 8px;
+  right: 36px;
+  height: 26px;
+  padding: 0;
 }
 /*# sourceMappingURL=style.css.map */

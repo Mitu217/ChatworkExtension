@@ -47,18 +47,6 @@ var ChatworkExtension;
                 localStorage[key] = value;
             }
         };
-        // レスポンスヘッダーを書き換えるマン
-        Background.startTextResponseHeaderCharsetFilter = function () {
-            chrome.webRequest.onHeadersReceived.addListener(function (filter) {
-                var responseHeaders = filter.responseHeaders.map(function (x) { return (x.name == "Content-Type" && x.value.match(/text\/plain/)) ? { name: "Content-Type", value: "text/plain; charset=shift_jis" } : x; });
-                console.log(filter);
-                console.log(responseHeaders);
-                return { responseHeaders: responseHeaders };
-            }, {
-                urls: ["*://*.s3-ap-northeast-1.amazonaws.com/*"],
-                types: ["xmlhttprequest"]
-            }, ["responseHeaders", "blocking"]);
-        };
         Background.externalCustomScript = {};
         return Background;
     })();

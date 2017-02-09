@@ -346,7 +346,7 @@ $(function(){
         }
 
         let $el = $(oldGetRoomItemPanel.apply(this, arguments));
-        $el.find('.chatListTitleArea').prepend(ignoreButton);
+        $el.find('.roomListItem__roomName').prepend(ignoreButton);
         return $el.wrap('<p>').parent().html();
     };
 

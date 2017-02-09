@@ -181,21 +181,23 @@ var ChatworkExtension;
             }
             IncrementalGroupFilter.prototype.onReady = function () {
                 var filterMenuE = document.getElementById('_chatFilterMenu');
-                filterMenuE.style.height = '74px';
+                filterMenuE.style.height = '70px';
             };
             IncrementalGroupFilter.prototype.onChatworkReady = function () {
                 var _this = this;
+                this._addBtn = document.getElementById('_addButton');
                 this._inputE = document.createElement('input');
                 this._inputE.style.left = '3px';
                 this._inputE.style.top = '40px';
-                this._inputE.style.width = '95%';
+                this._inputE.style.width = '93%';
                 this._inputE.style.position = 'absolute';
                 this._inputE.type = 'search';
                 this._inputE.placeholder = 'グループ名で検索'; // FIXME: placeholder属性をlabelとして使うとか最低最悪なのでいつか直す
                 this._inputE.addEventListener('change', function () { return _this.updateFilter(); });
                 this._inputE.addEventListener('keyup', function () { return _this.updateFilter(); });
                 var filterMenuE = document.getElementById('_chatFilterMenu');
-                filterMenuE.style.height = '74px';
+                filterMenuE.style.height = '70px';
+                filterMenuE.appendChild(this._addBtn);
                 filterMenuE.appendChild(this._inputE);
             };
             IncrementalGroupFilter.prototype.onGroupAppear = function (element) {
@@ -211,15 +213,39 @@ var ChatworkExtension;
                 if (value != null && value != '') {
                     var migemoRe = window.MigemoJS.getRegExp(value);
                     this._filterRe = new RegExp((migemoRe ? migemoRe + '|' : '') + value, 'i');
-                    [].forEach.call(document.querySelectorAll('#_roomListItems > li'), function (liE) {
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > ul > li'), function (liE) {
+                        if(!liE.hasAttribute('pre-display')) {
+                            liE.setAttribute('pre-display', liE.style.display);
+                        }
                         var label = liE.getAttribute('aria-label');
                         liE.style.display = _this._filterRe.test(label) ? '' : 'none';
+                    });
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > ul'), function (ulE) {
+                        if(!ulE.hasAttribute('pre-display')) {
+                            ulE.setAttribute('pre-display', ulE.style.display);
+                        }
+                        ulE.style.display = '';
+                    });
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > div'), function (divE) {
+                        divE.style.display = 'none';
                     });
                 }
                 else {
                     this._filterRe = null;
-                    [].forEach.call(document.querySelectorAll('#_roomListItems > li'), function (liE) {
-                        liE.style.display = '';
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > ul > li'), function (liE) {
+                        if(liE.hasAttribute('pre-display')) {
+                            liE.style.display = liE.getAttribute('pre-display');
+                            liE.removeAttribute('pre-display');
+                        }
+                    });
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > ul'), function (ulE) {
+                        if(ulE.hasAttribute('pre-display')) {
+                            ulE.style.display = ulE.getAttribute('pre-display');
+                            ulE.removeAttribute('pre-display');
+                        }
+                    });
+                    [].forEach.call(document.querySelectorAll('#_roomListItems > div'), function (divE) {
+                        divE.style.display = '';
                     });
                 }
             };
