@@ -5,6 +5,10 @@
   font-family: 'Consolas', monospace;
   line-height: 1.25;
 }
+.chatCode {
+  background: rgba(253, 253, 253, 1);
+  border: 1px solid #ccc;
+}
 #_sideContentTitle {
   height: 0 !important;
 }
