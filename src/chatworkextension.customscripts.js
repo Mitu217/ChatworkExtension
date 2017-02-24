@@ -48,11 +48,11 @@ $(function () {
                         return '[To:' + memberId + '] ' + displayName + "\n";
                     }
                 }
-            ], { adapter: CustomTextareaAdapter, appendTo: textCompleteTarget });            
+            ], { adapter: CustomTextareaAdapter, appendTo: textCompleteTarget });
         } else {
             console.error('not fount complete class');
         }
-        
+
     }, 1000);
 });
 // 常にグループ一覧を名前でソートするモード
@@ -505,8 +505,8 @@ $(function () {
 
 // グループ全員To(省略型)
 $(function() {
-    var btn = $($('#_toList').find('._cwLTSelectOptionArea')).append('　<span id="_toListSelectMinimumAll" role="to_all" class="linkStatus">すべて選択(省略)</span>');
-    btn.click(function() {
+    $('#_toList').find('._cwLTSelectOptionArea').append('　<span id="_toListSelectMinimumAll" role="to_all" class="linkStatus">すべて選択(省略)</span>');
+    $('#_toList').find('._cwLTSelectOptionArea').find('#_toListSelectMinimumAll').click(function() {
         // ToListの生成
         var to_list = [];
         $($('#_toList').find('._cwLTList')).find('img').each(function(){

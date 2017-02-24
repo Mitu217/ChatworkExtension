@@ -40,8 +40,19 @@
   right: 0;
   -webkit-transform: scale(0.6);
   margin-left: 10px;
-  width: 100px;
+  width: 125px;
   text-align: left;
+}
+.roomListBadges__taskBadge {
+  float: right;
+  margin-right: 0px !important;
+  padding: 0px;
+}
+.roomListBadges__unreadBadge {
+  margin-right: 8px !important;
+}
+.roomListBadges__mentionBadge {
+  margin-right: 8px !important;
 }
 .__x-ResizeGroupListHeight-enabled #_roomListItems li {
   height: 20px;
