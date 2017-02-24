@@ -14,7 +14,7 @@ $(function () {
         }
         $.extend(CustomTextareaAdapter.prototype, $.fn.textcomplete['Textarea'].prototype, {
             _skipSearch: function (clickEvent) {
-                if (clickEvent.keyCode === 27)
+                if (clickEvent.keyCode === 27 || clickEvent.keyCode === 38 || clickEvent.keyCode === 40)
                     return true;
                 $.fn.textcomplete['Textarea'].prototype._skipSearch.apply(_this, [clickEvent]);
             }
@@ -30,22 +30,22 @@ $(function () {
             $('#_chatText').textcomplete([
                 {
                     match: /\B@(\w*)$/,
-                    search: function (term, callback) {
-                        var memberIds = RM.getSortedMemberList().filter(function (x) { return x !== AC.myid.toString(); });
-                        var re = new RegExp(MigemoJS.getRegExp(term), "i");
+                    search: (term, callback) => {
+                        const memberIds = RM.getSortedMemberList().filter((x) => { return x !== AC.myid.toString(); });
+                        const re = new RegExp(MigemoJS.getRegExp(term), "i");
                         callback($.map(memberIds, function (memberId) {
-                            var searchKeys = AC.getSearchKeys(memberId).concat([AC.getTwitter(memberId)]).join(' ');
+                            const searchKeys = AC.getSearchKeys(memberId).concat([AC.getTwitter(memberId)]).join(' ');
                             return re.test(searchKeys) ? memberId : null;
-                        }).filter(function (x) { return x !== null; }));
+                        }).filter((x) => { return x !== null; }));
                     },
-                    template: function (memberId) {
-                        var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
+                    template: (memberId) => {
+                        const displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
                         return CW.getAvatarPanel(memberId, { clicktip: true, size: "small" }) + ' <span class="autotrim">' + escape_html(displayName) + "</span>";
                     },
                     index: 1,
-                    replace: function (memberId) {
-                        var displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
-                        return '[To:' + memberId + '] ' + displayName + "\n";
+                    replace: (memberId) => {
+                        const displayName = CW.is_business && ST.data.private_nickname && !RM.isInternal() ? AC.getDefaultNickName(memberId) : AC.getNickName(memberId);
+                        return '[To:' + memberId + '] ' + displayName;
                     }
                 }
             ], { adapter: CustomTextareaAdapter, appendTo: textCompleteTarget });
